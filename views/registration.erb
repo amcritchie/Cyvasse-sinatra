@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <section class="clearfix">
+    <article class="one_fourth"></article>
+    <article class="one_half">
+      <h1>Register for chess.ly!</h1>
+
+      <form action="/registration" method="post">
+        <fieldset>
+          <legend>Information:</legend>
+          <!--Flash notice-->
+          <% if flash[:registration] %>
+              <p style="color: red"><%= flash[:registration] %></p><br>
+          <% end %>
+          <input class="register_name" type="text" name="first_name"  placeholder="First Name" value="<%= register_attempt[:first_name]%>">
+          <input class="register_name" type="text" name="last_name"  placeholder="Last Name" value="<%= register_attempt[:last_name]%>"><br><br>
+          <input class="form_width" type="email" name="email" placeholder="Email@email.com" required value="<%= register_attempt[:email]%>"><br><br>
+          <input class="form_width" type="text" name="username" placeholder="Username" value="<%= register_attempt[:username]%>"><br><br>
+          <input class="form_width" type="password" name="password" placeholder="Password" ><br><br>
+          <input class="form_width" type="password" name="confirm_password" placeholder="Confirm Password"><br>
+        </fieldset>
+        <br>
+        <button name="reg_form" id="submit_button" type="submit">Register</button>
+
+      </form>
+    </article>
+    <article class="one_fourth"></article>
+  </section>
+</div>
