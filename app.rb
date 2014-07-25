@@ -16,40 +16,47 @@ class App < Sinatra::Application
   end
 
   def check_fields(new_user)
-    register_attempt = {}
-    if new_user[:first] == ''
-      flash[:registration] = "Please fill in your first name."
-      return register_attempt
-    end
-    register_attempt.merge!(:first_name => new_user[:first])
+    @register_attempt = {:continue => true}
 
-    if new_user[:last] == ''
-      flash[:registration] = "Please fill in your last name."
-      return register_attempt
+    def field_check(field, feedback, key)
+      if field != ''
+        @register_attempt.merge!(key => field)
+      else
+        @register_attempt[:continue] = false
+        flash[:registration] = feedback
+      end
+      @register_attempt
     end
-    register_attempt.merge!(:last_name => new_user[:last])
 
-    if new_user[:email] == ''
-      flash[:registration] = "Please fill in your email."
-      return register_attempt
+    field_check(new_user[:first], "Please fill in your first name.", :first_name)
+    if !@register_attempt[:continue]
+      return @register_attempt
     end
-    register_attempt.merge!(:email => new_user[:email])
+
+    field_check(new_user[:last], "Please fill in your last name.", :last_name)
+    if !@register_attempt[:continue]
+      return @register_attempt
+    end
+
+    field_check(new_user[:email], "Please fill in your email.", :email)
+    if !@register_attempt[:continue]
+      return @register_attempt
+    end
 
     if new_user[:username] == ''
       flash[:registration] = "Please fill in a username."
-      return register_attempt
+      return @register_attempt
     elsif @users_table.find_user(new_user[:username]) != []
       flash[:registration] = "Username is already in use, please choose another."
-      return register_attempt
+      return @register_attempt
     end
-    register_attempt.merge!(:username => new_user[:username])
+    @register_attempt.merge!(:username => new_user[:username])
 
     if new_user[:password] == ''
       flash[:registration] = "Please create a password."
-      return register_attempt
+      return @register_attempt
     end
-    register_attempt.merge!(:password => new_user[:password])
-
+    @register_attempt.merge!(:password => new_user[:password])
 
   end
 
@@ -74,27 +81,37 @@ class App < Sinatra::Application
         :password => params[:password],
         :confirm_password => params[:confirm_password]}
 
-    register_attempt = check_fields(new_user)
+    register_attempt = check_fields(new_user.each {|k,v| v.downcase!})
 
-    if register_attempt.count < (new_user.count - 1)
+    if register_attempt.count < (new_user.count)
       erb :registration, :locals => {:register_attempt => register_attempt}
     elsif params[:password] != params[:confirm_password]
       flash[:registration] = "Please enter your password identically"
       erb :registration, :locals => {:register_attempt => register_attempt}
     else
-      flash[:notice] = "Thank you for registering"
+      flash[:notice] = "Welcome #{params[:first_name].capitalize}, thanks registering!"
       flash[:registration] = nil
-      @users_table.create(params[:username], params[:password])
+      @users_table.create(params[:first_name], params[:last_name], params[:email], params[:username], params[:password])
       redirect "/"
     end
   end
 
+  post "start_game" do
+
+  end
+
   post "/login" do
-    current_user = @users_table.find_by(params[:username], params[:password])
-    session[:user_id] = current_user["id"]
-    # p "the session id is #{session[:user_id]}"
+    user = @users_table.find_username(params[:username])
+    if user == nil
+      flash[:login_fail] = "I'm sorry, but we couldn't find that username."
+      redirect "/"
+    elsif user["password"] != params[:password]
+      flash[:login_fail] = "I'm sorry, but that password does not match that username."
+      redirect "/"
+    end
+    session[:user_id] = user["id"]
     flash[:not_logged_in] = true
-    flash[:login] = "Welcome, #{params[:username].capitalize}"
+    flash[:login] = "Welcome, #{user["first_name"].capitalize}"
     redirect "/"
   end
 
@@ -102,6 +119,5 @@ class App < Sinatra::Application
     session[:user_id] = nil
     redirect "/"
   end
-
 end
 

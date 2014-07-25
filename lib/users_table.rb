@@ -3,10 +3,10 @@ class UsersTable
     @database_connection = database_connection
   end
 
-  def create(username, password)
+  def create(first_name, last_name, email, username, password)
     insert_user_sql = <<-SQL
-      INSERT INTO users (username, password)
-      VALUES ('#{username}', '#{password}')
+      INSERT INTO users (first_name, last_name, email, username, password)
+      VALUES ('#{first_name}', '#{last_name}', '#{email}', '#{username}', '#{password}')
       RETURNING id
     SQL
 
@@ -20,6 +20,15 @@ class UsersTable
     SQL
 
     @database_connection.sql(find_sql).first
+  end
+
+  def find_first_name(user_id)
+    first_name_sql = <<-SQL
+      SELECT first_name FROM users
+      WHERE id = #{user_id}
+    SQL
+
+    p @database_connection.sql(first_name_sql).first
   end
 
   def find_user(username)
@@ -49,6 +58,24 @@ class UsersTable
     @database_connection.sql(find_by_sql).first
   end
 
+  def find_username(username)
+    find_username = <<-SQL
+      SELECT * FROM users
+      WHERE username = '#{username}'
+    SQL
+
+    @database_connection.sql(find_username).first
+  end
+
+  def find_password(username)
+    find_password = <<-SQL
+      SELECT password FROM users
+      WHERE username = '#{username}'
+    SQL
+
+    @database_connection.sql(find_password).first
+  end
+
   def delete_user(username)
     delete_user_sql = <<-SQL
       DELETE FROM users
@@ -56,6 +83,16 @@ class UsersTable
     SQL
 
     @database_connection.sql(delete_user_sql)
+  end
+
+  def delete(id)
+    delete_sql = <<-SQL
+    DELETE
+    FROM trees
+    WHERE id = #{id}
+    SQL
+
+    database_connection.sql(delete_sql)
   end
 
 end
