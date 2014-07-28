@@ -15,18 +15,19 @@ class App < Sinatra::Application
     )
   end
 
+  def field_check(field, feedback, key)
+    if field != ''
+      @register_attempt.merge!(key => field)
+    else
+      @register_attempt[:continue] = false
+      flash[:registration] = feedback
+      # return @register_attempt
+    end
+    @register_attempt
+  end
+
   def check_fields(new_user)
     @register_attempt = {:continue => true}
-
-    def field_check(field, feedback, key)
-      if field != ''
-        @register_attempt.merge!(key => field)
-      else
-        @register_attempt[:continue] = false
-        flash[:registration] = feedback
-      end
-      @register_attempt
-    end
 
     field_check(new_user[:first], "Please fill in your first name.", :first_name)
     if !@register_attempt[:continue]
@@ -71,6 +72,11 @@ class App < Sinatra::Application
     erb :registration, :locals => {:register_attempt => register_attempt}
   end
 
+  get "/about_cyvasse" do
+    users = @users_table.users
+    erb :about_cyvasse
+  end
+
   post "/registration" do
 
     new_user = {
@@ -94,10 +100,6 @@ class App < Sinatra::Application
       @users_table.create(params[:first_name], params[:last_name], params[:email], params[:username], params[:password])
       redirect "/"
     end
-  end
-
-  post "start_game" do
-
   end
 
   post "/login" do
