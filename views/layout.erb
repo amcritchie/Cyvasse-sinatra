@@ -1,15 +1,53 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>PAGE TITLE HERE</title>
   <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
   <link href="/style_sheet.css" rel="stylesheet"/>
-  <article class="full_column">
-
-  </article>
 </head>
 
 <body>
+
+<!--<div class="navigation_bar">-->
+  <!--<section class="clearfix">-->
+
+  <!--<form action="/login" method="post">-->
+    <!--<article class="one_forth">-->
+      <!--<input class="form_width" name="username" placeholder="username" type="text"> <br>-->
+      <!--<input class="form_width" name="password" placeholder="password" type="password">-->
+    <!--</article>-->
+    <!--<article class="one_eighth">-->
+      <!--<button id="login_button" type="submit">Login</button>-->
+    <!--</article>-->
+  <!--</form>-->
+  <!--</section>-->
+<!--</div>-->
+
+<div class="navigation_bar">
+  <ul>
+    <li><a href="/registration">Home</a></li>
+    <li><a href="/registration">About</a></li>
+    <li><a href="/registration">Contact</a></li>
+    <li><a href="/registration">Blah</a></li>
+    <li>
+      <form action="/login" method="post">
+        <article class="one_eighth">
+          <input class="form_width" name="username" placeholder="username" type="text">
+        </article>
+
+        <article class="one_eighth">
+          <input class="form_width" name="password" placeholder="password" type="password">
+        </article>
+        <article class="one_eighth">
+          <button id="login_button" type="submit">Login</button>
+        </article>
+      </form>
+
+    </li>
+  </ul>
+
+</div>
+
+
 <div class="wrapper">
   <% if flash[:login] %>
       <p style="color: black; font-size: 60px"><%= flash[:login] %></p>
@@ -22,7 +60,13 @@
   </article>
   <article class="one_forth"></article>
 </div>
-<%= yield %>
+
+<div class="wrapper">
+  <section class="clearfix">
+    <h1>sup</h1>
+    <%= yield %>
+  </section>
+</div>
 
 
 <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>

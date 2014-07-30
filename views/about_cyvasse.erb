@@ -6,26 +6,6 @@
                 <div class='bottom'></div>
                </div>" %>
 
-<%
-   p "<<<<<<"
-   board = Array.new(11)
-   odd = true
-   p board
-   p board.class
-   board.each do |row|
-     p "======"
-     if odd
-       p "mmm"
-       row = Array.new(12,make_hex)
-       odd = false
-     else
-       p "nnnnn"
-       row = Array.new(11,make_hex)
-       odd = true
-     end
-   end
-%>
-
 <body>
 <div class="board">
   <section class="clearfix">
@@ -51,17 +31,6 @@
           <%= make_hex %>
           <%= make_hex %>
         </div>
-      </div>
-
-      <div class="hex_grid">
-        <div class="hex_row">
-          <% p board[1].class
-             board[1].each do |hex|
-
-            hex
-          end %>
-        </div>
-
       </div>
 
 

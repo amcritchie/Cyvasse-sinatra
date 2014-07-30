@@ -1,46 +1,40 @@
-<body>
-<div class="wrapper">
-  <section class="clearfix">
-    <article class="one_fourth"></article>
-    <article class="one_half">
-      <% if session[:user_id] %>
-          <h2>Options</h2>
+<article class="one_fourth"><h1>Hi</h1></article>
+<article class="one_half"><h1>Hello</h1>
+  <% if session[:user_id] %>
+      <h2>Options</h2>
 
-          <form action="/start_game" method="post">
-            <button id="submit_button" type="submit">Start a game of Cyvasse</button>
-          </form>
-          <br><br>
+      <form action="/start_game" method="post">
+        <button id="submit_button" type="submit">Start a game of Cyvasse</button>
+      </form>
+      <br><br>
 
-          <form action="/about_cyvasse" method="get">
-            <button id="submit_button" type="submit">Read about the game</button>
-          </form>
-          <br><br>
+      <form action="/about_cyvasse" method="get">
+        <button id="submit_button" type="submit">Read about the game</button>
+      </form>
+      <br><br>
 
-          <form action="/logout" method="post">
-            <button id="submit_button" type="submit">Logout</button>
-          </form>
+      <form action="/logout" method="post">
+        <button id="submit_button" type="submit">Logout</button>
+      </form>
 
-      <% else %>
-          <form action="/registration" method="get">
-            <button id="registration_button" type="submit">Register</button>
-          </form>
+  <% else %>
+      <form action="/registration" method="get">
+        <button id="registration_button" type="submit">Register</button>
+      </form>
 
-          <h2>OR</h2>
+      <h2>OR</h2>
 
-          <% if flash[:login_fail] %>
-              <p style="color: red"><%= flash[:login_fail] %></p><br>
-          <% end %>
-
-          <form action="/login" method="post">
-            Username: <br> <input class="form_width" type="text" name="username"><br>
-            Password: <br> <input class="form_width" type="password" name="password"><br><br>
-            <button id="login_button" type="submit">Login</button>
-          </form>
-
+      <% if flash[:login_fail] %>
+          <p style="color: red"><%= flash[:login_fail] %></p><br>
       <% end %>
 
-    </article>
-    <article class="one_fourth"></article>
-  </section>
-</div>
-</body>
+      <form action="/login" method="post">
+        Username: <br> <input class="form_width" type="text" name="username"><br>
+        Password: <br> <input class="form_width" type="password" name="password"><br><br>
+        <button id="login_button" type="submit">Login</button>
+      </form>
+
+  <% end %>
+
+</article>
+<article class="one_fourth"></article>
